@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  .bg-0 {
+    background: #507687;
+  }
+
+  .bg-1 {
+    background: #384B70;
+  }
+
+  .bg-3 {
+    background: #FCFAEE;
+  }
+
+  .bg-4 {
+    background: #B8001F;
+  }
+
+  .font-1 {
+    color: #212427;
+  }
+
+  .font-2 {
+    color: #FEFEFE;
+  }
+
+  .font-active {
+    color: #FCFAEE;
+  }
+
+  .font-info {
+    color: #17a2b8;
+  }
+
+}
+
+@layer components {
+  .btn {
+    background-color: #507687;
+    border-radius: 2rem;
+    padding: 0.3rem 1rem;
+    font-weight: 500;
+    color: #FEFEFE;
+    align-self: center;
+  }
+
+  .btn:hover {
+    background-color: #384B70;
+  }
+
+  .btn-secondary {
+    background-color: #FEFEFE;
+    color: #384B70;
+    border-color: #384B70;
+    border-width: 1px;
+  }
+
+  .btn-secondary:hover {
+    background-color: #e2e8f0;
+  }
+
+  .modal {
+    box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
+    background-color: white;
+    border: 2px solid rgb(240, 240, 240);
+    border-radius: 12px;
+    position:  absolute;
+    top: 30%;
+    right: 50%;
+    transform: translateX(50%);
+    padding: 1rem;
+  }
+  
+}
