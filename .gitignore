@@ -1,0 +1,4 @@
+node_modules/
+build/
+coverage/
+config/config.env
