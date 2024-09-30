@@ -5,6 +5,7 @@ import { log } from "../utils";
 import React from "react";
 import { BaseContext } from "../contexts/baseContext";
 import { BaseResponse, ErrorResponse } from "../models/Response";
+import { toast } from "react-toastify";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -26,6 +27,7 @@ export const useAxios = () => {
       return response.data as BaseResponse<TResponse>;
     } catch (error) {
       console.error('Error:', (error as any).response.data);
+      toast.error((error as any).response.data.message);
       return (error as any).response.data as ErrorResponse;
     } finally {
       setShowLoading(false);
@@ -48,6 +50,7 @@ export const useAxios = () => {
       return response.data as BaseResponse<TResponse>
     } catch (error) {
       console.error('Error:', (error as any).response.data);
+      toast.error((error as any).response.data.message);
       return (error as any).response.data as ErrorResponse;
     } finally {
       setShowLoading(false);
@@ -68,6 +71,7 @@ export const useAxios = () => {
       return response.data as BaseResponse<TResponse>
     } catch (error) {
       console.error('Error:', (error as any).response.data);
+      toast.error((error as any).response.data.message);
       return (error as any).response.data as ErrorResponse;
     } finally {
       setShowLoading(false);

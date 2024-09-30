@@ -18,6 +18,7 @@ import { Route as landingPageHomeMainImport } from './routes/(landing-page)/home
 import { Route as landingPageHomeAboutImport } from './routes/(landing-page)/home.about'
 import { Route as authenticateddashboardDashboardImport } from './routes/(authenticated)/(dashboard)/dashboard'
 import { Route as authenticateddashboardDashboardIndexImport } from './routes/(authenticated)/(dashboard)/dashboard.index'
+import { Route as authenticateddashboardDashboardTasksImport } from './routes/(authenticated)/(dashboard)/dashboard.tasks'
 import { Route as authenticateddashboardDashboardSettingsImport } from './routes/(authenticated)/(dashboard)/dashboard.settings'
 import { Route as authenticateddashboardDashboardProfileImport } from './routes/(authenticated)/(dashboard)/dashboard.profile'
 
@@ -63,6 +64,12 @@ const authenticateddashboardDashboardRoute =
 const authenticateddashboardDashboardIndexRoute =
   authenticateddashboardDashboardIndexImport.update({
     path: '/',
+    getParentRoute: () => authenticateddashboardDashboardRoute,
+  } as any)
+
+const authenticateddashboardDashboardTasksRoute =
+  authenticateddashboardDashboardTasksImport.update({
+    path: '/tasks',
     getParentRoute: () => authenticateddashboardDashboardRoute,
   } as any)
 
@@ -138,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticateddashboardDashboardSettingsImport
       parentRoute: typeof authenticateddashboardDashboardImport
     }
+    '/(authenticated)/(dashboard)/dashboard/tasks': {
+      id: '/dashboard/tasks'
+      path: '/tasks'
+      fullPath: '/dashboard/tasks'
+      preLoaderRoute: typeof authenticateddashboardDashboardTasksImport
+      parentRoute: typeof authenticateddashboardDashboardImport
+    }
     '/(authenticated)/(dashboard)/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -161,6 +175,7 @@ export const routeTree = rootRoute.addChildren({
     authenticateddashboardDashboardRoute.addChildren({
       authenticateddashboardDashboardProfileRoute,
       authenticateddashboardDashboardSettingsRoute,
+      authenticateddashboardDashboardTasksRoute,
       authenticateddashboardDashboardIndexRoute,
     }),
 })
@@ -194,6 +209,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/dashboard/profile",
         "/dashboard/settings",
+        "/dashboard/tasks",
         "/dashboard/"
       ]
     },
@@ -215,6 +231,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/dashboard/settings": {
       "filePath": "(authenticated)/(dashboard)/dashboard.settings.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/tasks": {
+      "filePath": "(authenticated)/(dashboard)/dashboard.tasks.tsx",
       "parent": "/dashboard"
     },
     "/dashboard/": {
