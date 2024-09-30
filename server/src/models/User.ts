@@ -1,8 +1,12 @@
-export type User = {
-  user_id: string;
-  username: string;
-  email: string;
-  password: string;
-  created_at: string;
-  updated_at?: string;
-}
+import mongoose from "mongoose";
+
+const UserSchema = new mongoose.Schema({
+  user_id: String,
+  username: String,
+  email: String,
+  password: String,
+});
+
+const User = mongoose.model('User', UserSchema);
+
+export default User;

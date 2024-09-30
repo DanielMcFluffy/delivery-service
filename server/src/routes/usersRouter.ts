@@ -1,11 +1,11 @@
-// import express from 'express';
-// import { getUsers } from '../controllers/users';
-// import { sessionAuth } from '../middlewares/sessionAuth';
+import express from 'express';
+import { getCookies, getUser } from '../controllers/users';
+import { authenthicated } from '../middlewares/authMiddleware';
 
-// export const usersRouter = express.Router();
+const router = express.Router();
+router.use(authenthicated);
 
-// usersRouter.use(sessionAuth);
+router.get("/:id", getUser);
+router.get("/get-cookies", getCookies);
 
-// usersRouter
-//   .route('/users')
-//   .get(getUsers);
+export default router;

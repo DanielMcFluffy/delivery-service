@@ -1,18 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorResponse } from "../lib/utils/errorResponse";
-import sql from "../db";
 import { BaseResponse } from "../lib/utils/BaseResponse";
+import User from "../models/User";
 
-export const getUsers = async(req: Request, res: Response, next: NextFunction) => {
-  const users = await sql`
-    SELECT * FROM users
-  `
-  console.log(users);
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findById(req.params.id);
 
-  if (!users.length) {
-    return next(new ErrorResponse('No users found', 404));
+    if (!user) return next(new ErrorResponse("No users found", 404));
+
+    const response = new BaseResponse(200, "success", user);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    console.log('here')
+    next(error);
   }
-  
-  const response = new BaseResponse(200, 'success', users)
+};
+
+export const getCookies = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const response = new BaseResponse(200, "", req.cookies);
   return res.status(response.status).json(response);
-}
+};

@@ -1,52 +1,35 @@
-import passport from 'passport';
-import express from 'express';
-import {Strategy as LocalStrategy} from 'passport-local';
-import sql from '../db';
-import { checkSession, login, logout, register } from '../controllers/auth';
-import bcrypt from 'bcrypt';
-import { User } from '../models/User';
+import bcrypt from "bcrypt";
+import express from "express";
+import passport from "passport";
+import { Strategy as LocalStrategy, VerifyFunction } from "passport-local";
+import { login, logout, register } from "../controllers/auth";
+import User from "../models/User";
+import { TUser } from "../models/userTypes";
 
-passport.use(new LocalStrategy(async(username, password, done) => {
-  
-  const user = await sql`
-    SELECT * FROM users
-    WHERE username = ${username}
-  ` as User[];
+const authUser: VerifyFunction = async (username: string, password, done) => {
+  const user = await User.findOne({ username: username });
 
-  const passwordMatch = await bcrypt.compare(password, user[0].password);
+  if (!user) return done(null, false, { message: 'Incorrect username or password' });
 
-  if (!passwordMatch) return done(null, false);  
+  const passwordMatch = await bcrypt.compare(password, user.password!);
+  if (!passwordMatch) return done(null, false, { message: "Incorrect username or password" });
 
-  if (!user.length) {
-    return done(null, false);
-  } 
-    return done(null, user[0])
-},));
+  return done(null, user);
+};
 
+passport.use(new LocalStrategy(authUser));
 passport.serializeUser((user, done) => {
-  return done(null, user)
-})
+  return done(null, user);
+});
 
-passport.deserializeUser((user, done) => {
-  return done(null, user as any)
-})
+passport.deserializeUser<TUser>((user, done) => {
+  return done(null, user);
+});
 
-export const authRouter = express.Router();
+const router = express.Router();
 
-authRouter
-  .route('/login')
-  .post(login);
+router.post("/login", login);
+router.post("/register", register);
+router.post("/logout", logout);
 
-authRouter
-  .route('/register')
-  .post(register);
-
-authRouter
-  .route('/check-session')
-  .get(checkSession)
-
-authRouter
-  .route('/logout')
-  .get(logout)
-
-  
+export default router;

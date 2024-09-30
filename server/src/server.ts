@@ -1,20 +1,30 @@
-import { configDotenv } from "dotenv";
-import express, { Request, Response } from "express";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { configDotenv } from 'dotenv';
+import express from "express";
+import session from 'express-session';
+import mongoose from "mongoose";
 import morgan from "morgan";
 import passport from 'passport';
-import session from 'express-session';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import { authRouter } from "./routes/authRouter";
-import { errorHandler } from "./middlewares/error";
-import { usersRouter } from "./routes/usersRouter";
+import path from 'path';
+import { errorHandler } from "./middlewares/errorMiddleware";
+import authRouter from "./routes/authRouter";
+import usersRouter from "./routes/usersRouter";
 
-configDotenv({path: ".././config/config.env"})  
-
-const PORT = process.env.PORT;
+configDotenv({ path: path.resolve(__dirname, "../../config.env") });
+const PORT = process.env.PORT || 5050; 
+mongoose
+  .connect(
+    process.env.CONNECTION_STRING!
+  )
+  .then(() => {
+    console.log("Connected to Database");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const app = express();
-
 app.use(cors({credentials: true, origin: process.env.CLIENT_URL}));
 app.use(cookieParser());
 app.use(express.json());
@@ -27,22 +37,18 @@ app.use(session({
   secret: process.env.SECRET!,
   resave: false,
   saveUninitialized: false,
-  cookie: {maxAge: 60 * 60 * 1000}, //1 hour
-}))
+  cookie: { 
+    maxAge: 60 * 60 * 1000,
+    httpOnly: true
+  },
+}));
 
-app.use(passport.authenticate('session'));
+app.use(passport.session());
 
-app.use('/', authRouter)
-app.get('/data', (req: Request, res: Response) => {
-  console.log('user', req.user);
-  console.log('session', req.session);
-  console.log('sessionID', req.session.id);
-  console.log('authenticated', req.isAuthenticated());
-  console.log(req.cookies);
-})
-app.use('/', usersRouter)
-
-
+app.use('/api/auth', authRouter)
+app.use('/api/user', usersRouter)
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`start listening on port : ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`start listening on port : ${PORT}`)
+);

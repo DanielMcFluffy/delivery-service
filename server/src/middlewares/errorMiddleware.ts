@@ -4,7 +4,6 @@ import { ErrorResponse } from "../lib/utils/errorResponse";
 import { ZodError } from "zod";
 
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-
   let error = { ...err };
   error.message = err.message;
 
