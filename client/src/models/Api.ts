@@ -1,12 +1,12 @@
 export type Api_GET = 
-| '/users'
-| '/check-session'
-| '/logout'
+| 'auth/'
+| 'auth/get-cookies'
 
 export type Api_POST = 
-| '/register'
-| '/login'
-
+| 'user/login'
+| 'user/register'
+| 'user/logout'
+| 'user/check-session'
 
 export type Api_DELETE = 
 | '/users'

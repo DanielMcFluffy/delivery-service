@@ -4,7 +4,7 @@ import { configDotenv } from 'dotenv';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 //define the env file path
-configDotenv({path: ".././config/config.env"})  
+configDotenv({path: "../config.env"})  
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

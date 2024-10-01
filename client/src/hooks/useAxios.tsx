@@ -7,7 +7,7 @@ import { BaseContext } from "../contexts/baseContext";
 import { BaseResponse, ErrorResponse } from "../models/Response";
 import { toast } from "react-toastify";
 
-const baseURL = import.meta.env.VITE_BASE_URL;
+const baseURL = import.meta.env.VITE_BASE_URL + '/api/';
 
 export const useAxios = () => {
   

@@ -208,16 +208,15 @@ const AuthModal = ({showLoginModal, setShowLoginModal, showRegisterModal, setSho
 
   const Login = async() => {
     const {username, password} = loginFormValue;
-    const response = await AxiosPOST('/login', {username, password});
+    const response = await AxiosPOST('user/login', {username, password});
     if (response.status === 200) {
-      localStorage.setItem('has-session', '1');
       navigate({to: '/dashboard'})
     }
   };
 
   const Register = async() => {
     const {username, password, email} = registerFormValue;
-    await AxiosPOST('/register', {username, password, email});
+    await AxiosPOST('user/register', {username, password, email});
     setShowLoginModal(false);
   }
 
