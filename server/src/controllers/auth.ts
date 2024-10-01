@@ -3,13 +3,13 @@ import { NextFunction, Request, Response } from "express";
 import passport, { AuthenticateCallback } from "passport";
 import { BaseResponse } from "../lib/utils/BaseResponse";
 import { ErrorResponse } from "../lib/utils/errorResponse";
-import { loginRequestSchema, registerRequestSchema } from "../lib/validation";
+import { LoginRequestSchema, RegisterRequestSchema } from "../lib/validation";
 import User from "../models/User";
 
 export const login = async(req: Request, res: Response, next: NextFunction) =>
 {
   try {
-    loginRequestSchema.parse(req.body)
+    LoginRequestSchema.parse(req.body);
 
     const authenthicateCallback: AuthenticateCallback = (err, user, info, status) => {
       if (err) return next(err);
@@ -30,7 +30,7 @@ export const login = async(req: Request, res: Response, next: NextFunction) =>
 
 export const register = async(req: Request, res: Response, next: NextFunction) => {
   try {
-  const validation = registerRequestSchema.parse(req.body)
+  const validation = RegisterRequestSchema.parse(req.body)
   const { username, password, email } = validation;
 
   if (!username || !password || !email) {
@@ -39,9 +39,8 @@ export const register = async(req: Request, res: Response, next: NextFunction) =
 
   const hashPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS!));
 
-  const user = User.create({ username: username, email: email, password: hashPassword });
-
-  const response = new BaseResponse(200, 'Registration successful', user);
+  await User.create({ username: username, email: email, password: hashPassword });
+  const response = new BaseResponse(200, 'Registration successful', undefined);
   
   return res.status(response.status).json(response);
   } catch (error) {
@@ -59,8 +58,20 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
   })
 }
 
-export const checkSession = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.isAuthenticated()) return true;
-
-  return false;
-}
+export const checkSession = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.isAuthenticated()) {
+      const response = new BaseResponse(200, "Valid session", true);
+      return res.status(response.status).json(response);
+    } else {
+      const response = new BaseResponse(401, "Invalid session", false);
+      return res.status(response.status).json(response);
+    }
+  } catch (error) {
+    return next(error);
+  }
+};

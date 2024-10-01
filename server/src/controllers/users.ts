@@ -10,7 +10,7 @@ export const getUser = async (
 ) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return next(new ErrorResponse("No users found", 404));
+    if (!user) return next(new ErrorResponse("User not found", 404));
     const response = new BaseResponse(200, "success", user);
 
     return res.status(response.status).json(response);
@@ -24,14 +24,12 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
+  try {
+    const user = User.findById(req.params.id);
+    if (!user) return next(new ErrorResponse("User not found", 404));
 
-};
 
-export const getCookies = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const response = new BaseResponse(200, "", req.cookies);
-  return res.status(response.status).json(response);
+  } catch (error) {
+    
+  }
 };
