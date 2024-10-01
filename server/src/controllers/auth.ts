@@ -42,6 +42,7 @@ export const register = async(req: Request, res: Response, next: NextFunction) =
   const user = User.create({ username: username, email: email, password: hashPassword });
 
   const response = new BaseResponse(200, 'Registration successful', user);
+  
   return res.status(response.status).json(response);
   } catch (error) {
     return next(error);
@@ -53,6 +54,13 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
   req.logOut({keepSessionInfo: false}, (err) => {
     if (err) next(err);
     const response = new BaseResponse(200, 'Logged out', undefined);
+
     return res.status(response.status).json(response);
   })
+}
+
+export const checkSession = async (req: Request, res: Response, next: NextFunction) => {
+  if (req.isAuthenticated()) return true;
+
+  return false;
 }

@@ -10,15 +10,21 @@ export const getUser = async (
 ) => {
   try {
     const user = await User.findById(req.params.id);
-
     if (!user) return next(new ErrorResponse("No users found", 404));
-
     const response = new BaseResponse(200, "success", user);
+
     return res.status(response.status).json(response);
   } catch (error) {
-    console.log('here')
     next(error);
   }
+};
+
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+
 };
 
 export const getCookies = async (

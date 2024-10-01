@@ -1,9 +1,9 @@
 import express from 'express';
 import { getCookies, getUser } from '../controllers/users';
-import { authenthicated } from '../middlewares/authMiddleware';
+import { verifyAuth } from '../middlewares/authMiddleware';
 
 const router = express.Router();
-router.use(authenthicated);
+router.use(verifyAuth);
 
 router.get("/:id", getUser);
 router.get("/get-cookies", getCookies);

@@ -2,9 +2,10 @@ import bcrypt from "bcrypt";
 import express from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy, VerifyFunction } from "passport-local";
-import { login, logout, register } from "../controllers/auth";
+import { checkSession, login, logout, register } from "../controllers/auth";
 import User from "../models/User";
 import { TUser } from "../models/userTypes";
+import { redirectAuthenthicated, verifyAuth } from "../middlewares/authMiddleware";
 
 const authUser: VerifyFunction = async (username: string, password, done) => {
   const user = await User.findOne({ username: username });
@@ -28,8 +29,9 @@ passport.deserializeUser<TUser>((user, done) => {
 
 const router = express.Router();
 
-router.post("/login", login);
+router.post("/login", redirectAuthenthicated, login);
 router.post("/register", register);
 router.post("/logout", logout);
+router.post("/check-session", verifyAuth, checkSession);
 
 export default router;
