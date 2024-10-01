@@ -7,6 +7,7 @@ import { CiLogout } from "react-icons/ci";
 
 import React from 'react';
 import { useAxios } from '../../../hooks/useAxios';
+import { MobileBreadcrumb } from '../../../components/MobileBreadcrumb';
 
 export const Route = createLazyFileRoute('/(authenticated)/(dashboard)/dashboard')({
   component: Dashboard
@@ -17,8 +18,10 @@ function Dashboard() {
   return(
     <>
     <div className='flex flex-col bg-0 h-dvh'>
-      <main className='flex h-full'>
-        <Sidebar /> <section className='h-full w-full px-6 py-4 bg-slate-50 rounded-tl-xl rounded-bl-xl shadow-md'><Outlet /></section>
+      <main className='flex flex-col sm:flex-row h-full'>
+        <Sidebar />
+        <MobileBreadcrumb /> 
+        <section className='h-full w-full px-6 py-4 bg-slate-50 sm:rounded-tl-xl sm:rounded-bl-xl shadow-md '><Outlet /></section>
       </main>
       <Footer />
     </div>

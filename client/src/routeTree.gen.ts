@@ -164,21 +164,140 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  landingPageHomeRoute: landingPageHomeRoute.addChildren({
-    landingPageHomeAboutRoute,
-    landingPageHomeMainRoute,
-    landingPageHomeServiceRoute,
-  }),
-  authenticateddashboardDashboardRoute:
-    authenticateddashboardDashboardRoute.addChildren({
+interface landingPageHomeRouteChildren {
+  landingPageHomeAboutRoute: typeof landingPageHomeAboutRoute
+  landingPageHomeMainRoute: typeof landingPageHomeMainRoute
+  landingPageHomeServiceRoute: typeof landingPageHomeServiceRoute
+}
+
+const landingPageHomeRouteChildren: landingPageHomeRouteChildren = {
+  landingPageHomeAboutRoute: landingPageHomeAboutRoute,
+  landingPageHomeMainRoute: landingPageHomeMainRoute,
+  landingPageHomeServiceRoute: landingPageHomeServiceRoute,
+}
+
+const landingPageHomeRouteWithChildren = landingPageHomeRoute._addFileChildren(
+  landingPageHomeRouteChildren,
+)
+
+interface authenticateddashboardDashboardRouteChildren {
+  authenticateddashboardDashboardProfileRoute: typeof authenticateddashboardDashboardProfileRoute
+  authenticateddashboardDashboardSettingsRoute: typeof authenticateddashboardDashboardSettingsRoute
+  authenticateddashboardDashboardTasksRoute: typeof authenticateddashboardDashboardTasksRoute
+  authenticateddashboardDashboardIndexRoute: typeof authenticateddashboardDashboardIndexRoute
+}
+
+const authenticateddashboardDashboardRouteChildren: authenticateddashboardDashboardRouteChildren =
+  {
+    authenticateddashboardDashboardProfileRoute:
       authenticateddashboardDashboardProfileRoute,
+    authenticateddashboardDashboardSettingsRoute:
       authenticateddashboardDashboardSettingsRoute,
+    authenticateddashboardDashboardTasksRoute:
       authenticateddashboardDashboardTasksRoute,
+    authenticateddashboardDashboardIndexRoute:
       authenticateddashboardDashboardIndexRoute,
-    }),
-})
+  }
+
+const authenticateddashboardDashboardRouteWithChildren =
+  authenticateddashboardDashboardRoute._addFileChildren(
+    authenticateddashboardDashboardRouteChildren,
+  )
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/home': typeof landingPageHomeRouteWithChildren
+  '/dashboard': typeof authenticateddashboardDashboardRouteWithChildren
+  '/home/about': typeof landingPageHomeAboutRoute
+  '/home/main': typeof landingPageHomeMainRoute
+  '/home/service': typeof landingPageHomeServiceRoute
+  '/dashboard/profile': typeof authenticateddashboardDashboardProfileRoute
+  '/dashboard/settings': typeof authenticateddashboardDashboardSettingsRoute
+  '/dashboard/tasks': typeof authenticateddashboardDashboardTasksRoute
+  '/dashboard/': typeof authenticateddashboardDashboardIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/home': typeof landingPageHomeRouteWithChildren
+  '/home/about': typeof landingPageHomeAboutRoute
+  '/home/main': typeof landingPageHomeMainRoute
+  '/home/service': typeof landingPageHomeServiceRoute
+  '/dashboard/profile': typeof authenticateddashboardDashboardProfileRoute
+  '/dashboard/settings': typeof authenticateddashboardDashboardSettingsRoute
+  '/dashboard/tasks': typeof authenticateddashboardDashboardTasksRoute
+  '/dashboard': typeof authenticateddashboardDashboardIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/home': typeof landingPageHomeRouteWithChildren
+  '/dashboard': typeof authenticateddashboardDashboardRouteWithChildren
+  '/home/about': typeof landingPageHomeAboutRoute
+  '/home/main': typeof landingPageHomeMainRoute
+  '/home/service': typeof landingPageHomeServiceRoute
+  '/dashboard/profile': typeof authenticateddashboardDashboardProfileRoute
+  '/dashboard/settings': typeof authenticateddashboardDashboardSettingsRoute
+  '/dashboard/tasks': typeof authenticateddashboardDashboardTasksRoute
+  '/dashboard/': typeof authenticateddashboardDashboardIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/home'
+    | '/dashboard'
+    | '/home/about'
+    | '/home/main'
+    | '/home/service'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/tasks'
+    | '/dashboard/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/home'
+    | '/home/about'
+    | '/home/main'
+    | '/home/service'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/tasks'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/home'
+    | '/dashboard'
+    | '/home/about'
+    | '/home/main'
+    | '/home/service'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/tasks'
+    | '/dashboard/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  landingPageHomeRoute: typeof landingPageHomeRouteWithChildren
+  authenticateddashboardDashboardRoute: typeof authenticateddashboardDashboardRouteWithChildren
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  landingPageHomeRoute: landingPageHomeRouteWithChildren,
+  authenticateddashboardDashboardRoute:
+    authenticateddashboardDashboardRouteWithChildren,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
