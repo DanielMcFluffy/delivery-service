@@ -6,6 +6,6 @@ const router = express.Router();
 router.use(verifyAuth);
 
 router.get("/:id", getUser);
-router.post("/update/:id", updateUser)
+router.post("/update/:id", updateUser);
 
 export default router;

@@ -4,7 +4,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy, VerifyFunction } from "passport-local";
 import { checkSession, login, logout, register } from "../controllers/auth";
 import User from "../models/User";
-import { TUser } from "../models/userTypes";
+import { TUser } from "../types/userTypes";
 
 const authUser: VerifyFunction = async (username: string, password, done) => {
   const user = await User.findOne({ username: username });
@@ -23,7 +23,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser<TUser>((user, done) => {
-  return done(null, user);
+  return done(null, user as TUser);
 });
 
 const router = express.Router();

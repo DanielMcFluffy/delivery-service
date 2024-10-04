@@ -1,7 +1,10 @@
+import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from "express";
-import { ErrorResponse } from "../lib/utils/errorResponse";
 import { BaseResponse } from "../lib/utils/BaseResponse";
+import { ErrorResponse } from "../lib/utils/errorResponse";
+import { UserRequestSchema } from "../lib/validation";
 import User from "../models/User";
+import { TUser } from '../types/userTypes';
 
 export const getUser = async (
   req: Request,
@@ -24,8 +27,25 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
+  // const sessionUser = req.user as TUser
+
+  // if (req.params.id !== sessionUser._id)
+
+  req.user?.avatar
+
   try {
-    const user = User.findById(req.params.id);
+    const validated = UserRequestSchema.parse(req.body);
+
+    if (validated.password) {
+      validated.password = bcrypt.hashSync(
+        validated.password,
+        parseInt(process.env.SALT_ROUNDS!)
+      );
+    }
+
+    const user = User.findByIdAndUpdate(req.params.id, {
+      $set: validated
+    }, { new: true });
     if (!user) return next(new ErrorResponse("User not found", 404));
 
 

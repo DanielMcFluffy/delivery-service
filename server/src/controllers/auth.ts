@@ -17,6 +17,7 @@ export const login = async(req: Request, res: Response, next: NextFunction) =>
       
       req.logIn(user, (err) => {
         if (err) return next(err);
+
         const response = new BaseResponse(200, "Login successful", user);
         return res.status(response.status).json(response);
       });
@@ -33,11 +34,7 @@ export const register = async(req: Request, res: Response, next: NextFunction) =
   const validation = RegisterRequestSchema.parse(req.body)
   const { username, password, email } = validation;
 
-  if (!username || !password || !email) {
-    return next(new ErrorResponse('Please fill all required fields', 400));
-  }
-
-  const hashPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS!));
+  const hashPassword = bcrypt.hashSync(password, parseInt(process.env.SALT_ROUNDS!));
 
   await User.create({ username: username, email: email, password: hashPassword });
   const response = new BaseResponse(200, 'Registration successful', undefined);
