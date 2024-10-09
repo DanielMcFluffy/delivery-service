@@ -34,7 +34,7 @@ export const register = async(req: Request, res: Response, next: NextFunction) =
   const validation = RegisterRequestSchema.parse(req.body)
   const { username, password, email } = validation;
 
-  const hashPassword = bcrypt.hashSync(password, parseInt(process.env.SALT_ROUNDS!));
+  const hashPassword = bcrypt.hashSync(password, parseInt(process.env.SALT_ROUNDS ?? '10'));
 
   await User.create({ username: username, email: email, password: hashPassword });
   const response = new BaseResponse(200, 'Registration successful', undefined);

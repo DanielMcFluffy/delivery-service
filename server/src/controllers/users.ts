@@ -27,11 +27,10 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  // const sessionUser = req.user as TUser
-
-  // if (req.params.id !== sessionUser._id)
-
-  req.user?.avatar
+  const sessionUser = req.user as TUser
+  if (req.params.id !== sessionUser._id) {
+    return next(new ErrorResponse("Id is not session user id", 401));
+  }
 
   try {
     const validated = UserRequestSchema.parse(req.body);
@@ -39,17 +38,17 @@ export const updateUser = async (
     if (validated.password) {
       validated.password = bcrypt.hashSync(
         validated.password,
-        parseInt(process.env.SALT_ROUNDS!)
+        parseInt(process.env.SALT_ROUNDS ?? '10')
       );
     }
 
-    const user = User.findByIdAndUpdate(req.params.id, {
-      $set: validated
-    }, { new: true });
+    const user = await User.findByIdAndUpdate(req.params.id, validated, { new: true });
     if (!user) return next(new ErrorResponse("User not found", 404));
 
-
+    const { password, ...rest } = user.toObject();
+    const response = new BaseResponse(200, "Success", rest);
+    return res.status(response.status).json(response);
   } catch (error) {
-    
+    next(error);
   }
 };

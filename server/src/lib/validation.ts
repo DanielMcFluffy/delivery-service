@@ -87,10 +87,12 @@ export const UserRequestSchema = z.object({
     })
     .optional(),
   country: z.string({ message: "Country is required" }).optional(),
-  coordinate: z.tuple(
-    [z.number().min(-90).max(90), z.number().min(-180).max(180)],
-    { message: "Coordinate is invalid" }
-  ).optional(),
+  coordinate: z
+    .tuple([z.number().min(-90).max(90), z.number().min(-180).max(180)], {
+      message: "Coordinate is invalid",
+    })
+    .optional(),
+  socialScore: z.array(z.string()).optional(),
 });
 
 export const JobRequestSchema = z.object({

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 
 const JobSchema = new mongoose.Schema({
+    imagesUrl: [String],
     title: String,
     description: String,
     status: { type: String, enum: ['done', 'pending'], default: 'pending' },
