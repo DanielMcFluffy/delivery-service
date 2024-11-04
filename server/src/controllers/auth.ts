@@ -34,6 +34,9 @@ export const register = async(req: Request, res: Response, next: NextFunction) =
   const validation = RegisterRequestSchema.parse(req.body)
   const { username, password, email } = validation;
 
+  const emailInUse = await User.findOne({ email: email });
+  if (emailInUse) return next(new ErrorResponse('Email already exist', 409))
+
   const hashPassword = bcrypt.hashSync(password, parseInt(process.env.SALT_ROUNDS ?? '10'));
 
   await User.create({ username: username, email: email, password: hashPassword });

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { TUser } from "../types/userTypes";
 
-
-const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<TUser>(
   {
     username: String,
     email: String,
