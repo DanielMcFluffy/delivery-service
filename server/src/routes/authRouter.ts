@@ -6,8 +6,8 @@ import { checkSession, login, logout, register } from "../controllers/auth";
 import User from "../models/User";
 import { TUser } from "../types/userTypes";
 
-const authUser: VerifyFunction = async (username: string, password, done) => {
-  const user = await User.findOne({ username: username });
+const authUser: VerifyFunction = async (email: string, password, done) => {
+  const user = await User.findOne({ email: email });
 
   if (!user) return done(null, false, { message: 'Incorrect username or password' });
 
@@ -17,7 +17,8 @@ const authUser: VerifyFunction = async (username: string, password, done) => {
   return done(null, user);
 };
 
-passport.use(new LocalStrategy(authUser));
+// change passport to use email instead of username to login
+passport.use(new LocalStrategy({ usernameField: 'email' }, authUser));
 passport.serializeUser((user, done) => {
   return done(null, user);
 });

@@ -1,7 +1,7 @@
 {
-  "name": "pawhaven",
+  "name": "delivery-service",
   "version": "1.0.0",
-  "description": "A website/portal to get collective information on pet medicine including information about domesticated animals, such as cats.",
+  "description": "A website portal build for the community and neighbour. Jobs are posted to hire helper around their area to do errand for a day. Volunteer can help out neighbour with their task",
   "main": "index.js",
   "scripts": {
     "start": "SET NODE_ENV=production & SET VITE_NODE_ENV=production & concurrently \"cd ./server && npm run dev\" \"cd ./client && npm run dev\"",

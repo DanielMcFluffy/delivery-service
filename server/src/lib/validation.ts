@@ -22,15 +22,13 @@ export const RegisterRequestSchema = z.object({
     }),
   email: z
     .string({ message: "Email is required" })
-    .email({ message: "Invalid email" })
+    .email({ message: "Invalid email" }),
 });
 
 export const LoginRequestSchema = z.object({
-  username: z
-    .string({ message: "Username cannot be blank" })
-    .refine((val) => val.length > 3, {
-      message: "Username must be between 3 and 20 characters",
-    }),
+  email: z
+    .string({ message: "Email is required" })
+    .email({ message: "Invalid email" }),
   password: z
     .string({ message: "Password cannot be blank" })
     .min(6, { message: "Password must be at least 6 characters long" })
@@ -99,10 +97,10 @@ export const JobRequestSchema = z.object({
   title: z.string({ message: "Title cannot be required" }),
   description: z.string({ message: "Description is required" }),
   location: z.string({ message: "Location is required" }),
-  coordinate: z.tuple([
-    z.number().min(-90).max(90),
-    z.number().min(-180).max(180),
-  ], { message: "Coordinate is invalid" }),
+  coordinate: z.tuple(
+    [z.number().min(-90).max(90), z.number().min(-180).max(180)],
+    { message: "Coordinate is invalid" }
+  ),
 });
 
 export type TRegisterRequest = z.infer<typeof RegisterRequestSchema>;
